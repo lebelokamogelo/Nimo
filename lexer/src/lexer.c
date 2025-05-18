@@ -12,10 +12,10 @@ Token make_token(TokenType type, const char *value)
     return token;
 }
 
-List *Tokens()
+List *Tokens(char *source)
 {
     List *list = malloc(sizeof(List));
-    char *source = "let x = (1 + 2);";
+    // char *source = "let x = (1 + 2);";
 
     list->capacity = 4;
     list->size = 0;

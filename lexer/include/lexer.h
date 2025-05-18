@@ -26,6 +26,6 @@ typedef struct
     Token *data;
 } List;
 
-List *Tokens();
+List *Tokens(char *source);
 
 #endif

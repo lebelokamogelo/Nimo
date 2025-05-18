@@ -6,9 +6,9 @@
 
 int main(void)
 {
-    // char source[] = "let x = (1 + 2);";
+    char *source = "let x = (1 + 2);";
 
-    List *list = Tokens();
+    List *list = Tokens(source);
 
     for (int i = 0; i < list->size; i++)
     {
