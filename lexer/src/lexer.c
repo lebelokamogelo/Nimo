@@ -1,21 +1,41 @@
+#include "../include/lexer.h"
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-int main(void)
+Token make_token(TokenType type, const char *value)
 {
+    Token token;
+    token.type = type;
+    token.value = strdup(value);
+    return token;
+}
+
+List *Tokens()
+{
+    List *list = malloc(sizeof(List));
     char *source = "let x = (1 + 2);";
 
-    while (*source != '\0')
+    list->capacity = 4;
+    list->size = 0;
+    list->data = malloc(list->capacity * sizeof(Token));
 
+    while (*source != '\0')
     {
         if (*source == ' ')
         {
             source++;
             continue;
         }
-        else if (isdigit(*source))
+
+        if (list->size >= list->capacity)
+        {
+            list->capacity *= 2;
+            list->data = realloc(list->data, list->capacity * sizeof(Token));
+        }
+
+        if (isdigit(*source))
         {
             int capacity = 4;
             char *data = malloc(capacity * sizeof(char));
@@ -30,10 +50,9 @@ int main(void)
                 data[index++] = *source;
                 source++;
             }
-
             data[index] = '\0';
 
-            printf("Number: %s\n", data);
+            list->data[list->size++] = make_token(Number, data);
             free(data);
         }
         else if (isalpha(*source))
@@ -54,49 +73,44 @@ int main(void)
             }
 
             data[index] = '\0';
+
             if (strcmp(data, "let") == 0)
-            {
-                printf("Keyword: %s\n", data);
-            }
+                list->data[list->size++] = make_token(Keyword, data);
             else
-            {
-                printf("Identifier: %s\n", data);
-            }
+                list->data[list->size++] = make_token(Identifier, data);
 
             free(data);
         }
         else if (*source == '+')
         {
-            printf("Plus: +\n");
+            list->data[list->size++] = make_token(Plus, "+");
             source++;
         }
         else if (*source == '=')
         {
-            printf("Equals: =\n");
+            list->data[list->size++] = make_token(Equals, "=");
             source++;
         }
         else if (*source == '(')
         {
-            printf("Open Paren: (\n");
+            list->data[list->size++] = make_token(OPEN_PAREN, "(");
             source++;
         }
         else if (*source == ')')
         {
-            printf("Close Paren: )\n");
+            list->data[list->size++] = make_token(CLOSE_PAREN, ")");
             source++;
         }
         else if (*source == ';')
         {
-            printf("Semicolon: ;\n");
+            list->data[list->size++] = make_token(SEMICOLON, ";");
             source++;
         }
-
         else
         {
-            printf("Unknown token: %c\n", *source);
             source++;
         }
     }
 
-    return 0;
+    return list;
 }
