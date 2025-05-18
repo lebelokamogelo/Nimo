@@ -65,6 +65,11 @@ int main(void)
 
             free(data);
         }
+        else if (*source == '+')
+        {
+            printf("Plus: +\n");
+            source++;
+        }
         else if (*source == '=')
         {
             printf("Equals: =\n");
