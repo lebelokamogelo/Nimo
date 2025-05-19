@@ -7,7 +7,7 @@ $(shell mkdir -p $(BUILD_DIR))
 
 all: $(BUILD_DIR)/main
 
-$(BUILD_DIR)/main: $(SRC_DIR)/main.c $(SRC_DIR)/lexer.c
+$(BUILD_DIR)/main: $(SRC_DIR)/main.c $(SRC_DIR)/lexer.c $(SRC_DIR)/parser.c
 	$(CC) $(CFLAGS) $< -o $@
 
 run: $(BUILD_DIR)/main
