@@ -4,18 +4,18 @@
 #include <string.h>
 #include <ctype.h>
 
-Token make_token(TokenType type, const char *value)
+Token create_token(TokenType type, const char *value)
 {
     Token token;
     token.type = type;
-    token.value = strdup(value);
+    token.value = value ? strdup(value) : NULL;
+    ;
     return token;
 }
 
 List *Tokens(char *source)
 {
     List *list = malloc(sizeof(List));
-    // char *source = "let x = (1 + 2);";
 
     list->capacity = 4;
     list->size = 0;
@@ -52,7 +52,7 @@ List *Tokens(char *source)
             }
             data[index] = '\0';
 
-            list->data[list->size++] = make_token(Number, data);
+            list->data[list->size++] = create_token(TOKEN_NUMBER, data);
             free(data);
         }
         else if (isalpha(*source))
@@ -75,35 +75,35 @@ List *Tokens(char *source)
             data[index] = '\0';
 
             if (strcmp(data, "let") == 0)
-                list->data[list->size++] = make_token(Keyword, data);
+                list->data[list->size++] = create_token(TOKEN_LET, data);
             else
-                list->data[list->size++] = make_token(Identifier, data);
+                list->data[list->size++] = create_token(TOKEN_IDENTIFIER, data);
 
             free(data);
         }
         else if (*source == '+')
         {
-            list->data[list->size++] = make_token(Plus, "+");
+            list->data[list->size++] = create_token(TOKEN_PLUS, "+");
             source++;
         }
         else if (*source == '=')
         {
-            list->data[list->size++] = make_token(Equals, "=");
+            list->data[list->size++] = create_token(TOKEN_EQUALS, "=");
             source++;
         }
         else if (*source == '(')
         {
-            list->data[list->size++] = make_token(OPEN_PAREN, "(");
+            list->data[list->size++] = create_token(TOKEN_LPAREN, "(");
             source++;
         }
         else if (*source == ')')
         {
-            list->data[list->size++] = make_token(CLOSE_PAREN, ")");
+            list->data[list->size++] = create_token(TOKEN_RPAREN, ")");
             source++;
         }
         else if (*source == ';')
         {
-            list->data[list->size++] = make_token(SEMICOLON, ";");
+            list->data[list->size++] = create_token(TOKEN_SEMICOLON, ";");
             source++;
         }
         else
@@ -112,5 +112,6 @@ List *Tokens(char *source)
         }
     }
 
+    list->data[list->size] = create_token(TOKEN_EOF, NULL);
     return list;
 }

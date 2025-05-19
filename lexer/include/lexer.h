@@ -3,14 +3,15 @@
 
 typedef enum TokenType
 {
-    Number,
-    Identifier,
-    Keyword,
-    Equals,
-    Plus,
-    OPEN_PAREN,
-    CLOSE_PAREN,
-    SEMICOLON,
+    TOKEN_LET,
+    TOKEN_IDENTIFIER,
+    TOKEN_EQUALS,
+    TOKEN_LPAREN,
+    TOKEN_RPAREN,
+    TOKEN_NUMBER,
+    TOKEN_PLUS,
+    TOKEN_SEMICOLON,
+    TOKEN_EOF,
 } TokenType;
 
 typedef struct
