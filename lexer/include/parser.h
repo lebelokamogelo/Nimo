@@ -23,7 +23,6 @@ typedef struct ASTNode
     char *value;
     struct ASTNode *left;
     struct ASTNode *right;
-    struct ASTNode *expr;
 } ASTNode;
 
 #include "../include/parser.h"
