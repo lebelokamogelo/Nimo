@@ -7,19 +7,12 @@ typedef struct
 {
     Token *tokens;
     int current;
+    int size;
 } Parser;
-
-typedef enum
-{
-    AST_LET,
-    AST_BINARY,
-    AST_NUMBER,
-    AST_IDENTIFIER
-} ASTNodeType;
 
 typedef struct ASTNode
 {
-    ASTNodeType type;
+    TokenType type;
     char *value;
     struct ASTNode *left;
     struct ASTNode *right;
@@ -32,8 +25,8 @@ Token current_token(Parser *parser);
 void advance(Parser *parser);
 void expect(Parser *parser, TokenType type);
 
-void parse_term(Parser *parser);
-void parse_expression(Parser *parser);
+ASTNode *parse_term(Parser *parser);
+ASTNode *parse_expression(Parser *parser);
 void parse_statement(Parser *parser);
 
 #endif
