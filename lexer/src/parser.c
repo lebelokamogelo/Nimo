@@ -54,7 +54,6 @@ ASTNode *parse_term(Parser *parser)
 {
 
     ASTNode *node = create_number_node(parser);
-    printf("%s\n", node->value);
 
     if (node->type == TOKEN_NUMBER || node->type == TOKEN_IDENTIFIER)
     {
@@ -65,8 +64,6 @@ ASTNode *parse_term(Parser *parser)
 
         else if (node_bin.type == TOKEN_SEMICOLON)
             return node;
-
-        printf("%s\n", node_bin.value);
     }
     else if (node->type == TOKEN_LPAREN)
     {
@@ -90,17 +87,23 @@ ASTNode *parse_expression(Parser *parser)
     while (token.type == TOKEN_PLUS)
     {
         advance(parser);
-        parse_term(parser);
+        ASTNode *right = parse_term(parser);
         token = current_token(parser);
+
+        if (token.type == TOKEN_SEMICOLON)
+            return node;
+        node = create_ast_op(token.value, node, right);
     }
     return node;
 }
 
-void parse_statement(Parser *parser)
+ASTNode *parse_statement(Parser *parser)
 {
     expect(parser, TOKEN_LET);
     expect(parser, TOKEN_IDENTIFIER);
     expect(parser, TOKEN_EQUALS);
-    parse_expression(parser);
-    // expect(parser, TOKEN_SEMICOLON);
+    ASTNode *node = parse_expression(parser);
+    expect(parser, TOKEN_SEMICOLON);
+
+    return node;
 }

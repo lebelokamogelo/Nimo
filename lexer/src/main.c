@@ -7,7 +7,7 @@
 
 int main(void)
 {
-    char *source = "let x = 1 + 2";
+    char *source = "let x = 1 + 2;";
 
     List *list = Tokens(source);
 
@@ -16,7 +16,7 @@ int main(void)
     parser.size = list->size;
     parser.current = 0;
 
-    parse_statement(&parser);
+    ASTNode *node = parse_statement(&parser);
 
     free(parser.tokens);
     printf("Completed\n");

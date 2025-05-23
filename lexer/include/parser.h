@@ -27,6 +27,6 @@ void expect(Parser *parser, TokenType type);
 
 ASTNode *parse_term(Parser *parser);
 ASTNode *parse_expression(Parser *parser);
-void parse_statement(Parser *parser);
+ASTNode *parse_statement(Parser *parser);
 
 #endif
