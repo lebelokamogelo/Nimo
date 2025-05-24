@@ -58,12 +58,6 @@ ASTNode *parse_term(Parser *parser)
     if (node->type == TOKEN_NUMBER || node->type == TOKEN_IDENTIFIER)
     {
         advance(parser);
-        Token node_bin = current_token(parser);
-        if (node_bin.value == NULL)
-            return node;
-
-        else if (node_bin.type == TOKEN_SEMICOLON)
-            return node;
     }
     else if (node->type == TOKEN_LPAREN)
     {
@@ -86,14 +80,18 @@ ASTNode *parse_expression(Parser *parser)
     Token token = current_token(parser);
     while (token.type == TOKEN_PLUS)
     {
-        advance(parser);
-        ASTNode *right = parse_term(parser);
         token = current_token(parser);
 
         if (token.type == TOKEN_SEMICOLON)
             return node;
+
+        advance(parser);
+
+        ASTNode *right = parse_expression(parser);
+
         node = create_ast_op(token.value, node, right);
     }
+
     return node;
 }
 
@@ -103,6 +101,7 @@ ASTNode *parse_statement(Parser *parser)
     expect(parser, TOKEN_IDENTIFIER);
     expect(parser, TOKEN_EQUALS);
     ASTNode *node = parse_expression(parser);
+
     expect(parser, TOKEN_SEMICOLON);
 
     return node;

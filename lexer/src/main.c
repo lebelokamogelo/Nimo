@@ -5,9 +5,21 @@
 #include "./lexer.c"
 #include "./parser.c"
 
+void print_ast(ASTNode *node)
+{
+
+    if (node == NULL)
+    {
+        return;
+    }
+    print_ast(node->left);
+    printf("%s\n", node->value);
+    print_ast(node->right);
+}
+
 int main(void)
 {
-    char *source = "let x = 1 + 2;";
+    char *source = "let x = 1 + 2 + 3;";
 
     List *list = Tokens(source);
 
@@ -17,6 +29,8 @@ int main(void)
     parser.current = 0;
 
     ASTNode *node = parse_statement(&parser);
+
+    print_ast(node);
 
     free(parser.tokens);
     printf("Completed\n");
