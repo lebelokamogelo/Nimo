@@ -5,16 +5,16 @@
 #include "./lexer.c"
 #include "./parser.c"
 
-void print_ast(ASTNode *node)
+int print_ast(ASTNode *node)
 {
 
-    if (node == NULL)
+    if (node->type == TOKEN_NUMBER)
     {
-        return;
+        printf("%s\n", node->value);
+        return atoi(node->value);
     }
-    print_ast(node->left);
-    printf("%s\n", node->value);
-    print_ast(node->right);
+
+    return print_ast(node->left) + print_ast(node->right);
 }
 
 int main(void)
@@ -30,7 +30,8 @@ int main(void)
 
     ASTNode *node = parse_statement(&parser);
 
-    print_ast(node);
+    int result = print_ast(node);
+    printf("The result is %d\n", result);
 
     free(parser.tokens);
     printf("Completed\n");
