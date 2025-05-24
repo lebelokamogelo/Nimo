@@ -7,13 +7,10 @@
 
 int eval(ASTNode *node)
 {
-
     if (node->type == TOKEN_NUMBER)
     {
-        printf("%s\n", node->value);
         return atoi(node->value);
     }
-
     return eval(node->left) + eval(node->right);
 }
 
@@ -31,6 +28,7 @@ int main(void)
     ASTNode *node = parse_statement(&parser);
 
     int result = eval(node);
+
     printf("The result is %d\n", result);
 
     free(parser.tokens);
