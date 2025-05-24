@@ -19,7 +19,7 @@ void print_ast(ASTNode *node)
 
 int main(void)
 {
-    char *source = "let x = 1 + 2 + 3;";
+    char *source = "let x = 1 + (2 + 3);";
 
     List *list = Tokens(source);
 

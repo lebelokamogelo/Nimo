@@ -52,22 +52,23 @@ ASTNode *create_number_node(Parser *parser)
 
 ASTNode *parse_term(Parser *parser)
 {
+    Token token = current_token(parser);
+    ASTNode *node = NULL;
 
-    ASTNode *node = create_number_node(parser);
-
-    if (node->type == TOKEN_NUMBER || node->type == TOKEN_IDENTIFIER)
+    if (token.type == TOKEN_NUMBER)
     {
+        node = create_number_node(parser);
         advance(parser);
     }
-    else if (node->type == TOKEN_LPAREN)
+    else if (token.type == TOKEN_LPAREN)
     {
         advance(parser);
-        parse_expression(parser);
+        node = parse_expression(parser);
         expect(parser, TOKEN_RPAREN);
     }
     else
     {
-        fprintf(stderr, "Error: Expected NUMBER, IDENTIFIER, or LPAREN, got %d\n", node->type);
+        fprintf(stderr, "Error: Expected NUMBER, IDENTIFIER, or LPAREN, got token type %d ('%s')\n", token.type, token.value ? token.value : "NULL");
         exit(1);
     }
 
@@ -78,18 +79,15 @@ ASTNode *parse_expression(Parser *parser)
 {
     ASTNode *node = parse_term(parser);
     Token token = current_token(parser);
+
     while (token.type == TOKEN_PLUS)
     {
-        token = current_token(parser);
-
-        if (token.type == TOKEN_SEMICOLON)
-            return node;
-
+        char *op_value = token.value;
         advance(parser);
 
-        ASTNode *right = parse_expression(parser);
-
-        node = create_ast_op(token.value, node, right);
+        ASTNode *right = parse_term(parser);
+        node = create_ast_op(op_value, node, right);
+        token = current_token(parser);
     }
 
     return node;
