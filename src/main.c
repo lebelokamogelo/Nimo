@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
-#include "./lexer.c"
-#include "./parser.c"
+#include "../lexer/lexer.c"
+#include "../parser/parser.c"
 
 int eval(ASTNode *node)
 {

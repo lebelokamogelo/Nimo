@@ -1,5 +1,6 @@
 #include "../include/parser.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Token current_token(Parser *parser)
 {
